@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: Erik de Vries
+  description: Adds a check to Datadog which checks the local installed Wordpress installation for vulnerabilities
+  license: BSD
+  min_ansible_version: 1.4
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+  categories:
+    - monitoring
+dependencies: []

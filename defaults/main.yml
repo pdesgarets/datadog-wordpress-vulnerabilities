@@ -1,0 +1,5 @@
+---
+dwv_wordpress_path: ""
+dwv_datadog_checks_path: /etc/dd-agent/checks.d
+dwv_datadog_conf_path: /etc/dd-agent/conf.d
+dwv_datadog_check_interval: 900

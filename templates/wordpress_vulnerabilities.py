@@ -14,7 +14,7 @@ class WordpressCheck(AgentCheck):
         path = instance['path'];
 
         os.chdir(path)
-        wp_version = subprocess.check_output(["wp", "core", 'version', '--allow-root']).strip().replace(".", "")
+        wp_version = subprocess.check_output(["wp", "core", 'version']).strip().replace(".", "")
 
         conn = httplib.HTTPSConnection("wpvulndb.com")
         conn.request("GET","/api/v2/wordpresses/" + wp_version)

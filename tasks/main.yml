@@ -4,14 +4,10 @@
     src: wordpress_vulnerabilities.py
     dest: "{{ dwv_datadog_checks_path }}/wordpress_vulnerabilities.py"
     mode: 0644
+  notify: restart datadog-agent
 
 - name: Configure Wordpress vulnerabilities check for Datadog
   template:
     src: wordpress_vulnerabilities.yaml.j2
     dest: "{{ dwv_datadog_conf_path }}/wordpress_vulnerabilities.yaml"
-
-- name: Restart Datadog Agent
-  service:
-    name: datadog-agent
-    state: restarted
-    enabled: true
+  notify: restart datadog-agent

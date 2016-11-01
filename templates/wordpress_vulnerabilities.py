@@ -17,7 +17,10 @@ class WordpressCheck(AgentCheck):
         wp_version = subprocess.check_output(["wp", "core", 'version']).strip().replace(".", "")
 
         conn = httplib.HTTPSConnection("wpvulndb.com")
-        conn.request("GET","/api/v2/wordpresses/" + wp_version)
+        headers = {
+            "User-agent": "Datadog Wordpress Vulnerabilities check"
+        }
+        conn.request("GET","/api/v2/wordpresses/" + wp_version, None, headers)
         res = conn.getresponse()
         data = res.read()
         conn.close()

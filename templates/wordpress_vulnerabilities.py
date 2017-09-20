@@ -16,7 +16,7 @@ class WordpressCheck(AgentCheck):
         os.chdir(path)
         with open("wp-includes/version.php") as f:
             version_file = f.read()
-            wp_version = re.search("wp_version = '(.*?)'", version).group(1).replace(".", "")
+            wp_version = re.search("wp_version = '(.*?)'", version_file).group(1).replace(".", "")
 
         conn = httplib.HTTPSConnection("wpvulndb.com")
         headers = {

@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 
 import subprocess
-import sys, os
+import sys, os, re
 import httplib
 import ssl
 import json
@@ -14,7 +14,9 @@ class WordpressCheck(AgentCheck):
         path = instance['path'];
 
         os.chdir(path)
-        wp_version = subprocess.check_output(["wp", "core", 'version']).strip().replace(".", "")
+        with open("wp-includes/version.php") as f:
+            version_file = f.read()
+            wp_version = re.search("wp_version = '(.*?)'", version).group(1).replace(".", "")
 
         conn = httplib.HTTPSConnection("wpvulndb.com")
         headers = {
@@ -24,9 +26,11 @@ class WordpressCheck(AgentCheck):
         res = conn.getresponse()
         data = res.read()
         conn.close()
+        if res.status == 404:
+            self.gauge('wordpress.core.vulnerabilities', 0)
+        else:
+            json_data = json.loads(data)
 
-        json_data = json.loads(data)
+            vulnerability_count = len(json_data.values()[0]['vulnerabilities'])
 
-        vulnerability_count = len(json_data.values()[0]['vulnerabilities'])
-
-        self.gauge('wordpress.core.vulnerabilities', vulnerability_count)
+            self.gauge('wordpress.core.vulnerabilities', vulnerability_count)
